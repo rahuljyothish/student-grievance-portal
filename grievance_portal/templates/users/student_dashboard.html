@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Welcome, {{ user.name }}!</h2>
+    <p>Student ID: {{ user.student_id }}</p>
+    
+    <div class="row mb-3">
+        <div class="col">
+            <a href="{% url 'create_grievance' %}" class="btn btn-primary">Submit New Grievance</a>
+        </div>
+    </div>
+    
+    <h3>Your Grievances</h3>
+    {% if grievances %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Date Submitted</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grievance in grievances %}
+                        <tr>
+                            <td>{{ grievance.title }}</td>
+                            <td>{{ grievance.get_category_display }}</td>
+                            <td>
+                                {% if grievance.status == 'pending' %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% elif grievance.status == 'in_progress' %}
+                                    <span class="badge bg-info">In Progress</span>
+                                {% else %}
+                                    <span class="badge bg-success">Resolved</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ grievance.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'grievance_detail' grievance.id %}" class="btn btn-sm btn-info">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            You haven't submitted any grievances yet.
+        </div>
+    {% endif %}
+{% endblock %}

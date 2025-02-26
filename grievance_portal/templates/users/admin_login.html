@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Welcome, {{ user.get_admin_role_display }} (ID: {{ user.admin_id }})!</h2>
+    
+    <h3>Grievances for Your Department</h3>
+    {% if grievances %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Student</th>
+                        <th>Status</th>
+                        <th>Date Submitted</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grievance in grievances %}
+                        <tr>
+                            <td>{{ grievance.title }}</td>
+                            <td>{{ grievance.student.name }} ({{ grievance.student.student_id }})</td>
+                            <td>
+                                {% if grievance.status == 'pending' %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% elif grievance.status == 'in_progress' %}
+                                    <span class="badge bg-info">In Progress</span>
+                                {% else %}
+                                    <span class="badge bg-success">Resolved</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ grievance.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'grievance_detail' grievance.id %}" class="btn btn-sm btn-info">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            There are no grievances assigned to your department.
+        </div>
+    {% endif %}
+{% endblock %}

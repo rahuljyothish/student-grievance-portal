@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit Grievance{% endblock %}
+
+{% block content %}
+    <h2>Submit a New Grievance</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.category.id_for_label }}">Category:</label>
+            {{ form.category }}
+            {% if form.category.errors %}
+                <div class="text-danger">{{ form.category.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.title.id_for_label }}">Title:</label>
+            {{ form.title }}
+            {% if form.title.errors %}
+                <div class="text-danger">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.description.id_for_label }}">Description:</label>
+            {{ form.description }}
+            {% if form.description.errors %}
+                <div class="text-danger">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Submit Grievance</button>
+        </div>
+    </form>
+{% endblock %}

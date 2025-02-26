@@ -1,0 +1,84 @@
+<!-- templates/grievances/grievance_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}Grievance Detail{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>{{ grievance.title }}</h3>
+            <span class="badge {% if grievance.status == 'pending' %}bg-warning{% elif grievance.status == 'in_progress' %}bg-info{% else %}bg-success{% endif %}">
+                {{ grievance.get_status_display }}
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Category:</strong> {{ grievance.get_category_display }}</p>
+                    <p><strong>Submitted by:</strong> {{ grievance.student.name }} ({{ grievance.student.student_id }})</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Date Submitted:</strong> {{ grievance.created_at|date:"F d, Y H:i" }}</p>
+                    <p><strong>Last Updated:</strong> {{ grievance.updated_at|date:"F d, Y H:i" }}</p>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header">
+                    Description
+                </div>
+                <div class="card-body">
+                    {{ grievance.description|linebreaks }}
+                </div>
+            </div>
+            
+            {% if user.user_type == 'admin' and grievance.status != 'resolved' %}
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'mark_resolved' grievance.id %}" class="btn btn-success">Mark as Resolved</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <h4>Responses</h4>
+    {% if responses %}
+        {% for response in responses %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <span>{{ response.admin.get_admin_role_display }}</span>
+                        <small>{{ response.created_at|date:"F d, Y H:i" }}</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {{ response.response|linebreaks }}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            No responses yet.
+        </div>
+    {% endif %}
+    
+    {% if user.user_type == 'admin' and form %}
+        <div class="card mt-4">
+            <div class="card-header">
+                Add Response
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.response }}
+                        {% if form.response.errors %}
+                            <div class="text-danger">{{ form.response.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Submit Response</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
