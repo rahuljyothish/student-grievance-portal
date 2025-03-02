@@ -1,0 +1,62 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+env/
+venv/
+ENV/
+.venv/
+.ENV/
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Django-specific files
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.swp
+*.swo
+*.swn
+
+# Static and media files (optional, if you don't want to track these)
+staticfiles/
+media/
+
+# Environment files (for secrets, env vars)
+*.env
+*.env.*
+
+# Migrations cache (if you want to be very clean, though migrations are usually tracked)
+**/migrations/__pycache__/
+
+# Coverage reports
+htmlcov/
+.coverage
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Celery beat schedule file
+celerybeat-schedule
+
+# Local databases or backup files (if any)
+*.sqlite3
+*.db
+
+# Compiled translations
+*.mo
+
+# Build files
+build/
+dist/
+*.egg-info/
